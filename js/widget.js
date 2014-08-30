@@ -1,54 +1,73 @@
-var  data_two_days = ["PiPs", -43.9, 50],
-    two_days = ["days", "2014-08-22", "2014-08-23"],
-    week = ["days", "2014-08-17", "2014-08-18", "2014-08-19" , "2014-08-20",  "2014-08-21", "2014-08-22", "2014-08-23"],
-    data_week = ["PiPs", 40, 30, 10, -23, -5,-43.9, 50];
+var generateChart = function(id, data){
 
-var chart = c3.generate({
-    bindto: "#chart",
-    
-    data: {
-        x: "days",
-        
-        columns: [
-            two_days,
-            data_two_days
-        ],
-        
-        type: 'bar',
-        
-        labels: true,
-        
-        color: function (color, d) {            
-            return d3.rgb(color).darker(d.value / 150);
+    var c3Options = {
+        bindto: id,
+
+        data: {
+            columns: data.data,
+
+            type: data.type,
+
+            label: true
         },
-        
-        onclick: function(data){
+
+        grid: {
+            y: {
+                lines: [{value: 0}]
+            }
+        }
+    };
+
+    for(var key in data){
+        switch(key){
+            case "x": {
+                c3Options.data[key] = data[key];
+            };
+            break;
+            case "axis":  {
+                c3Options[key] = data[key];
+            };
+            break;
+            default: {
+                //Think of something
+            }
+        };
+    };
+
+    if(data.hasOwnProperty("onclick"))
+    {
+        var onclickOptions = data.onclick;
+
+        var callback = function(d){
+
             this.load({
-                columns: [
-                    week,
-                    data_week
-                ],
+                columns: onclickOptions.data,
                 
-                type: "line"
+                type: onclickOptions.type
             });
-        }
-    },
 
-    axis: {
-        x: {
-            label: "Timeline",
-            type: "timeseries",
-            format: "%Y-%m-%d"
-        },
-        
-        y: {
-            label: "PiPs"
-        },
-    },
-    
-    grid: {
-        y: {
-            lines: [{value: 0}]
-        }
-    }
-});
+            if(!!onclickOptions.navigation){
+                var legend = d3.select(onclickOptions.navigation.container).insert("div", onclickOptions.navigation.id).attr("class", "navigation-legend");
+
+                legend.append("span").attr("class", "navigation-legend-label").html(onclickOptions.navigation.label);
+            };
+        };
+
+        c3Options.data.onclick = callback;
+    };
+
+    var chart = c3.generate(c3Options);
+
+    if(!!data.onclick.navigation){
+        d3.select(data.onclick.navigation.container)[0][0].
+        addEventListener("click", function(event){
+            if(event.target && (event.target.className === "navigation-legend" || 
+                event.target.className === "navigation-legend-label")){
+                chart.load(c3Options.data);
+
+                event.target.className === "navigation-legend-label" ? event.target.remove() :
+                    event.target.parentNode.remove();
+            }
+        });
+    };
+};
