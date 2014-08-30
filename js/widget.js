@@ -5,11 +5,13 @@ var generateChart = function(id, data){
         bindto: id,
 
         data: {
-            columns: data.data,
+            url: data.url,
+
+            mimeType: data.mimeType,
 
             type: data.type,
 
-            label: true
+            label: true,
         },
 
         grid: {
@@ -42,7 +44,9 @@ var generateChart = function(id, data){
         var callback = function(d){
 
             this.load({
-                columns: onclickOptions.data,
+                url: onclickOptions.url,
+
+                mimeType: onclickOptions.mimeType,
                 
                 type: onclickOptions.type
             });
@@ -62,9 +66,8 @@ var generateChart = function(id, data){
                         .append("select").attr("class", "change-timeline");
 
                 dropdown.append("option").attr("selected", "selected")
-                    .attr("value", "1 Day").html("1 Day");
-                dropdown.append("option").attr("value", "1 Week").html("1 Week");
-                dropdown.append("option").attr("value", "1 Month").html("1 Month");
+                    .attr("value", "js/data/ea_hist_2_w.json").html("1 Week");
+                dropdown.append("option").attr("value", "js/data/ea_hist_2_m.json").html("1 Month");
             };
         };
 
@@ -74,8 +77,7 @@ var generateChart = function(id, data){
     var chart = c3.generate(c3Options);
 
     if(!!data.onclick.navigation){
-        chartContainer[0][0].
-        addEventListener("click", function(event){
+        chartContainer[0][0].addEventListener("click", function(event){
             if(event.target && (event.target.className === "navigation-legend" || 
                 event.target.className === "navigation-legend-label")){
                 chart.load(c3Options.data);
@@ -89,14 +91,12 @@ var generateChart = function(id, data){
     };
 
     if(!!data.onclick.navigation){
-        chartContainer[0][0].
-        addEventListener("change", function(event){
+        chartContainer[0][0].addEventListener("change", function(event){
             if(event.target && (event.target.className === "change-timeline")){
                 chart.load({
-                    columns: [
-                        ["days", "2014-08-11", "2014-08-12", "2014-08-14", "2014-08-15"],
-                        ["PiPs", -16.9, -35.1, -23.6, -37.5]
-                    ]
+                    url: event.target.value,
+
+                    mimeType: "json"
                 });
             }
         });
