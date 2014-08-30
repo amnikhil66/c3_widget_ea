@@ -34,6 +34,8 @@ var data = {
 
     	type: "line",
 
+    	dropdown_selector: true,
+
     	navigation: {
     		id: "#chart",
 
