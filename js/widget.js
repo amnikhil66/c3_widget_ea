@@ -1,5 +1,7 @@
 var generateChart = function(id, data){
-    var chartContainer = d3.select(data.onclick.navigation.container);
+    var chartContainer = null;
+    var chart = null;
+    var has_nav = false;
 
     var c3Options = {
         bindto: id,
@@ -19,6 +21,10 @@ var generateChart = function(id, data){
                 lines: [{value: 0}]
             }
         }
+    };
+
+    var refreshChart = function(chart, options){
+        chart.load(options);
     };
 
     for(var key in data){
@@ -41,9 +47,11 @@ var generateChart = function(id, data){
     {
         var onclickOptions = data.onclick;
 
+        has_nav = onclickOptions.hasOwnProperty("navigation") && !!onclickOptions.navigation;
+
         var callback = function(d){
 
-            this.load({
+            refreshChart(this, {
                 url: onclickOptions.url,
 
                 mimeType: onclickOptions.mimeType,
@@ -51,7 +59,11 @@ var generateChart = function(id, data){
                 type: onclickOptions.type
             });
 
-            if(!!onclickOptions.navigation){
+            // this.load();
+
+            if(has_nav){
+                chartContainer = d3.select(data.onclick.navigation.container);
+
                 var legend = chartContainer
                     .insert("div", onclickOptions.navigation.id)
                         .attr("class", "navigation-legend");
@@ -74,9 +86,9 @@ var generateChart = function(id, data){
         c3Options.data.onclick = callback;
     };
 
-    var chart = c3.generate(c3Options);
+    chart = c3.generate(c3Options);
 
-    if(!!data.onclick.navigation){
+    if(has_nav){
         chartContainer[0][0].addEventListener("click", function(event){
             if(event.target && (event.target.className === "navigation-legend" || 
                 event.target.className === "navigation-legend-label")){
@@ -88,18 +100,25 @@ var generateChart = function(id, data){
                 d3.select(".change-timeline-container").remove();
             }
         });
-    };
-
-    if(!!data.onclick.navigation){
         chartContainer[0][0].addEventListener("change", function(event){
             if(event.target && (event.target.className === "change-timeline")){
-                chart.load({
+                refreshChart(chart, {
                     url: event.target.value,
 
                     mimeType: "json"
                 });
             }
         });
+    };
+
+    if(data.hasOwnProperty("refresh_interval")){
+        setInterval(function(){
+            refreshChart(chart, {
+                url: data.url,
+
+                mimeType: "json"
+            });
+        }, data.refresh_interval);
     };
 
     return chart;
