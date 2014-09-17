@@ -94,7 +94,7 @@ var generateChart = function(id, data){
         chartContainer[0][0].addEventListener("change", function(event){
             if(event.target && (event.target.className === "change-timeline")){
                 chart.load({
-                    url: event.target.value,
+                    url: event.target.value +  "?" + Math.floor(Math.random() * 10000),
 
                     mimeType: "json"
                 });
