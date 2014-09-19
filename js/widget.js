@@ -123,7 +123,7 @@ var generateChart = function(id, data){
     if(data.hasOwnProperty("refresh_interval")){
         setInterval(function(){
             refreshChart(chart, {
-                url: data.url,
+                url: data.url + "?" + Math.floor(Math.random()*10000),
 
                 mimeType: "json"
             });
