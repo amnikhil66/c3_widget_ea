@@ -13,7 +13,7 @@ var generateChart = function(id, data){
 
             type: data.type,
 
-            label: true,
+            labels: true
         },
 
         grid: {
@@ -41,6 +41,15 @@ var generateChart = function(id, data){
                 //Think of something
             }
         };
+    };
+
+    if(data.hasOwnProperty("colors")){
+        c3Options.data["colors"] = data.colors;
+
+    };
+
+    if(data.hasOwnProperty("color")){
+        c3Options.data["color"] = data.color;
     };
 
     if(data.hasOwnProperty("onclick"))

@@ -58,11 +58,15 @@ var currency_pairs_id = "#currency_pairs_chart";
 var currenciesBarData = {
     x: "Symbols",
 
-    url: "js/data/cc_1_all_1.json",
+    url: "js/data/cc_1_1.json",
 
     mimeType: "json",
 
     type: "bar",
+
+    color: function(color, d){
+        return !!d.value ? (d.value > 0 ? "#1bc45b" : "#ec3232") : color;
+    },
 
     refresh_interval: 2000,
 
@@ -73,19 +77,25 @@ var currenciesBarData = {
         },
 
         y: {
-            label: "PiPs"
+            label: "PiPs",
+            min: -30,
+            max: 30
         }
     }
 };
 
 var currencyPairsData = {
-    x: "Symbols",
+    x: "Pairs",
 
-    url: "http://128.199.166.83:8000/?file=cc_1_all_1440.json",
+    url: "js/data/cc_2_EUR_1.json",
 
     mimeType: "json",
 
     type: "bar",
+
+    color: function(color, d){
+        return !!d.value ? (d.value > 0 ? "#1bc45b" : "#ec3232") : color;
+    },
 
     refresh_interval: 2000,
 
@@ -96,7 +106,9 @@ var currencyPairsData = {
         },
 
         y: {
-            label: "PiPs"
+            label: "PiPs",
+            min: -5,
+            max: 5
         }
     }
 };
