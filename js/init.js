@@ -81,7 +81,7 @@ var currenciesBarData = {
 var currencyPairsData = {
     x: "Symbols",
 
-    url: "js/data/cc_1_all_5.json",
+    url: "http://128.199.166.83:8000/?file=cc_1_all_1440.json",
 
     mimeType: "json",
 
