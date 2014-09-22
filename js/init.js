@@ -78,8 +78,8 @@ var currenciesBarData = {
 
         y: {
             label: "PiPs",
-            min: -30,
-            max: 30
+            max: 30,
+            min: -30
         }
     }
 };
