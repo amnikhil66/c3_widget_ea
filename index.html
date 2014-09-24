@@ -18,7 +18,31 @@
 
 		<div class="currency-correlation-container">
 			<div id="currencies_chart"></div>
-			<div id="currency_pairs_chart"></div>
+			<div id="currency_paris_container">
+				<div id="currency_paris_selectors">
+					<select name="currency_selector" id="currency_selector">
+						<option value="EUR" selected>EUR</option>
+						<option value="AUD">AUD</option>
+						<option value="CAD">CAD</option>
+						<option value="CHF">CHF</option>
+						<option value="GBP">GBP</option>
+						<option value="JPY">JPY</option>
+						<option value="NZD">NZD</option>
+						<option value="USD">USD</option>
+					</select>
+					<select name="time_period_selector" id="time_period_selector">
+						<option value="1" selected>1 Min</option>
+						<option value="5">5 Mins</option>
+						<option value="15">15 Mins</option>
+						<option value="30">30 Mins</option>
+						<option value="60">1 Hour</option>
+						<option value="240">4 Hours</option>
+						<option value="1440">1 Day</option>
+						<option value="43200">1 Month</option>
+					</select>
+				</div>
+				<div id="currency_pairs_chart"></div>
+			</div>
 		</div>
 
 		<script src="js/init.js"></script>

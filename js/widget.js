@@ -1,7 +1,8 @@
 var generateChart = function(id, data){
-    var chartContainer = null;
-    var chart = null;
-    var has_nav = false;
+    var chartContainer = null,
+        has_nav = false,
+        chartInterval = null,
+        chart = null;
 
     var c3Options = {
         bindto: id,
@@ -27,6 +28,30 @@ var generateChart = function(id, data){
         chart.load(options);
     };
 
+    var clearChartInterval = function(){
+        if(!!chartInterval){
+            clearInterval(chartInterval);
+            chartInterval = null;
+        }
+    };
+
+    var chartSetInterval = function(){
+        clearChartInterval();
+        chartInterval = setInterval(function(){
+            refreshChart(chart, {
+                url: c3Options.data.url + "?" + Math.floor(Math.random()*10000),
+                mimeType: "json"
+            });
+        }, data.refresh_interval);
+
+    };
+
+    var redrawChart = function(url){
+        c3Options.data.url = url;
+
+        refreshChart(chart, c3Options);
+    };
+
     for(var key in data){
         switch(key){
             case "x": {
@@ -45,15 +70,13 @@ var generateChart = function(id, data){
 
     if(data.hasOwnProperty("colors")){
         c3Options.data["colors"] = data.colors;
-
-    };
+    }
 
     if(data.hasOwnProperty("color")){
         c3Options.data["color"] = data.color;
-    };
+    }
 
-    if(data.hasOwnProperty("onclick"))
-    {
+    if(data.hasOwnProperty("onclick")){
         var onclickOptions = data.onclick;
 
         has_nav = onclickOptions.hasOwnProperty("navigation") && !!onclickOptions.navigation;
@@ -68,8 +91,6 @@ var generateChart = function(id, data){
                 type: onclickOptions.type
             });
 
-            // this.load();
-
             if(has_nav){
                 chartContainer = d3.select(data.onclick.navigation.container);
 
@@ -78,7 +99,7 @@ var generateChart = function(id, data){
                         .attr("class", "navigation-legend");
 
                 legend.append("span").attr("class", "navigation-legend-label").html(onclickOptions.navigation.label);
-            };
+            }
 
             if(!!onclickOptions.dropdown_selector){
                 var dropdown = chartContainer
@@ -89,11 +110,11 @@ var generateChart = function(id, data){
                 dropdown.append("option").attr("selected", "selected")
                     .attr("value", "js/data/ea_hist_2_w.json").html("1 Week");
                 dropdown.append("option").attr("value", "js/data/ea_hist_2_m.json").html("1 Month");
-            };
+            }
         };
 
         c3Options.data.onclick = callback;
-    };
+    }
 
     chart = c3.generate(c3Options);
 
@@ -117,16 +138,14 @@ var generateChart = function(id, data){
                 });
             }
         });
-    };
+    }
 
     if(data.hasOwnProperty("refresh_interval")){
-        setInterval(function(){
-            refreshChart(chart, {
-                url: data.url + "?" + Math.floor(Math.random()*10000),
-                mimeType: "json"
-            });
-        }, data.refresh_interval);
-    };
+        chartSetInterval();
+    }
 
-    return chart;
+    return {
+        chart: chart,
+        redrawChart: redrawChart
+    };
 };

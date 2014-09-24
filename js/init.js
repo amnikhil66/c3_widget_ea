@@ -114,4 +114,21 @@ var currencyPairsData = {
 };
 
 generateChart(currencies_bar_id, currenciesBarData);
-generateChart(currency_pairs_id, currencyPairsData);
+var pairs = generateChart(currency_pairs_id, currencyPairsData);
+
+// Events Sections
+d3.select("#currency_selector")
+    .on("change", function(event){
+        var url = "js/data/cc_2_" + d3.event.target.value +
+            "_" + document.getElementById("time_period_selector").value + ".json";
+        
+        pairs.redrawChart(url);
+});
+
+d3.select("#time_period_selector")
+    .on("change", function(event){
+        var url = "js/data/cc_2_" + document.getElementById("currency_selector").value +
+            "_" + d3.event.target.value + ".json";
+        
+        pairs.redrawChart(url);
+});
