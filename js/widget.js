@@ -111,14 +111,8 @@ var generateChart = function(id, data){
         });
         chartContainer[0][0].addEventListener("change", function(event){
             if(event.target && (event.target.className === "change-timeline")){
-<<<<<<< HEAD
-                chart.load({
-                    url: event.target.value +  "?" + Math.floor(Math.random() * 10000),
-=======
                 refreshChart(chart, {
                     url: event.target.value,
->>>>>>> a5e2a4d78a16634b1f89dab8fc3c9672c1fb331f
-
                     mimeType: "json"
                 });
             }
@@ -128,8 +122,7 @@ var generateChart = function(id, data){
     if(data.hasOwnProperty("refresh_interval")){
         setInterval(function(){
             refreshChart(chart, {
-                url: event.target.value,
-
+                url: data.url + "?" + Math.floor(Math.random()*10000),
                 mimeType: "json"
             });
         }, data.refresh_interval);
