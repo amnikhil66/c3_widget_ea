@@ -78,8 +78,9 @@ var currenciesBarData = {
 
         y: {
             label: "PiPs",
-            max: 30,
-            min: -30
+            tick: {
+                format : function(d){ console.log(d); return Math.floor(d);} 
+            }
         }
     }
 };
@@ -107,8 +108,9 @@ var currencyPairsData = {
 
         y: {
             label: "PiPs",
-            min: -5,
-            max: 5
+            tick: {
+                format : function(d){ console.log(d); return Math.floor(d);} 
+            }
         }
     }
 };
