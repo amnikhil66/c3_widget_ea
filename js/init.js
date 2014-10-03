@@ -79,7 +79,7 @@ var currenciesBarData = {
         y: {
             label: "PiPs",
             tick: {
-                format : function(d){ console.log(d); return Math.floor(d);} 
+                format : function(d){ return Math.floor(d);} 
             }
         }
     }
@@ -109,7 +109,7 @@ var currencyPairsData = {
         y: {
             label: "PiPs",
             tick: {
-                format : function(d){ console.log(d); return Math.floor(d);} 
+                format : function(d){ return Math.floor(d);} 
             }
         }
     }
