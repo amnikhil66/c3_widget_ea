@@ -2,27 +2,30 @@ var generateChart = function(id, data){
     var chartContainer = null,
         has_nav = false,
         chartInterval = null,
-        chart = null;
+        chart = null,
+        c3Options = {
+            bindto: id,
 
-    var c3Options = {
-        bindto: id,
-
-        data: {
-            url: data.url,
-
-            mimeType: data.mimeType,
-
+            grid: {
+                y: {
+                    lines: [{value: 0}]
+                }
+            }
+        },
+        dataObj = {
             type: data.type,
 
             labels: true
-        },
+        };
+    
+    if(data.hasOwnProperty("url")){
+        dataObj.url = data.url;
+        dataObj.mimeType = data.mimeType;
+    }else{
+        dataObj.columns = data.data;
+    }
 
-        grid: {
-            y: {
-                lines: [{value: 0}]
-            }
-        }
-    };
+    c3Options.data = dataObj;
 
     var refreshChart = function(chart, options){
         chart.load(options);
